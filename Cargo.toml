@@ -1,0 +1,9 @@
+[package]
+name = "Machine_Assignment_1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+hamcrest2 = "*"
