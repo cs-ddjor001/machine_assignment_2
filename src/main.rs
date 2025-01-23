@@ -10,9 +10,7 @@ const MAX_DIGITS: u32 = 8;
 /// will print a table displaying the original decimal numbers and their
 /// target base equivalents.
 fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let (target_base, f64_numbers) = parse_input(args);
+    let (target_base, f64_numbers) = parse_input();
 
     let target_base_numbers: Vec<String> = f64_numbers
         .iter()
@@ -22,7 +20,9 @@ fn main() {
     display(target_base, f64_numbers, target_base_numbers);
 }
 
-fn parse_input(args: Vec<String>) -> (u32, Vec<f64>) {
+fn parse_input() -> (u32, Vec<f64>) {
+    let args: Vec<String> = env::args().collect();
+
     let target_base: u32 = args[1].parse::<u32>().unwrap();
 
     let f64_numbers: Vec<f64> = args
@@ -57,7 +57,7 @@ fn convert_from_decimal_to_binary(decimal: f64, target_base: u32) -> String {
     for _ in 0..MAX_DIGITS {
         fraction *= target_base as f64;
         let digit = fraction.floor() as u32;
-        result.push_str(&digit.to_string());
+        result += &format!("{};", digit);
         fraction -= digit as f64;
 
         if fraction == 0.0 {
@@ -93,37 +93,40 @@ mod tests {
 
     #[test]
     fn test_conversion() {
-        assert_that!(convert_from_decimal_to_binary(0.5, 2), equal_to("0.1"));
-        assert_that!(convert_from_decimal_to_binary(0.25, 2), equal_to("0.01"));
-        assert_that!(convert_from_decimal_to_binary(0.75, 2), equal_to("0.11"));
-        assert_that!(convert_from_decimal_to_binary(0.125, 2), equal_to("0.001"));
+        assert_that!(convert_from_decimal_to_binary(0.5, 2), equal_to("0.1;"));
+        assert_that!(convert_from_decimal_to_binary(0.25, 2), equal_to("0.0;1;"));
+        assert_that!(convert_from_decimal_to_binary(0.75, 2), equal_to("0.1;1;"));
+        assert_that!(
+            convert_from_decimal_to_binary(0.125, 2),
+            equal_to("0.0;0;1;")
+        );
         assert_that!(
             convert_from_decimal_to_binary(0.6875, 2),
-            equal_to("0.1011")
+            equal_to("0.1;0;1;1;")
         );
         assert_that!(
             convert_from_decimal_to_binary(0.7, 2),
-            equal_to("0.10110011")
+            equal_to("0.1;0;1;1;0;0;1;1;")
         );
         assert_that!(
             convert_from_decimal_to_binary(0.8, 2),
-            equal_to("0.11001100")
+            equal_to("0.1;1;0;0;1;1;0;0;")
         );
         assert_that!(
             convert_from_decimal_to_binary(0.9, 2),
-            equal_to("0.11100110")
+            equal_to("0.1;1;1;0;0;1;1;0;")
         );
         assert_that!(
             convert_from_decimal_to_binary(0.6, 2),
-            equal_to("0.10011001")
+            equal_to("0.1;0;0;1;1;0;0;1;")
         );
         assert_that!(
             convert_from_decimal_to_binary(0.3, 2),
-            equal_to("0.01001100")
+            equal_to("0.0;1;0;0;1;1;0;0;")
         );
         assert_that!(
             convert_from_decimal_to_binary(0.1, 2),
-            equal_to("0.00011001")
+            equal_to("0.0;0;0;1;1;0;0;1;")
         );
     }
 }
