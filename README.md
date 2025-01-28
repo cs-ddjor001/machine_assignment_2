@@ -6,6 +6,7 @@
 - Use cargo build to compile the program. Use cargo run to run the program.
 - Use cargo test to run the unit tests.
 - Use cargo run -- followed by an integer for the target base, followed by a list of real between 0 and 1 seperated by a space (e.g. cargo run -- 2 0.5 0.25 0.75) to get an output similair to the one below.
+- If not integer target base is provided, or the target base provided is a non-integer, the target base defaults to 2.
 
 Example output:
 | Base 10 | Base 2   |
