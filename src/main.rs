@@ -30,7 +30,8 @@ fn main() {
 /// # Panics
 ///
 /// This function assumes the first command line arguement is a valid
-/// u32 number to be used as target base for conversion.
+/// u32 number to be used as target base for conversion. If no arguement is provided,
+/// or the arguement is a non-integer, the target base defaults to 2.
 /// All arguments after the target base are valid
 /// floating-point numbers. If invalid arguments are provided, they will
 /// be skipped.
@@ -46,11 +47,24 @@ fn main() {
 fn parse_input() -> (u32, Vec<f64>) {
     let args: Vec<String> = env::args().collect();
 
-    let target_base: u32 = args[1].parse::<u32>().unwrap();
+    let target_base: u32 = args
+        .get(1)
+        .and_then(|arg| arg.parse::<u32>().ok())
+        .unwrap_or(2);
+
+    let skip_count = if args
+        .get(1)
+        .and_then(|arg| arg.parse::<u32>().ok())
+        .is_some()
+    {
+        2
+    } else {
+        1
+    };
 
     let f64_numbers: Vec<f64> = args
         .iter()
-        .skip(2)
+        .skip(skip_count)
         .flat_map(|arg| arg.parse::<f64>())
         .collect();
     (target_base, f64_numbers)
